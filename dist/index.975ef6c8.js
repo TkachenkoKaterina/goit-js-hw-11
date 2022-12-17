@@ -536,9 +536,9 @@ async function fetchGallery(dataInput) {
         &page=${page}`);
     console.log(response);
     console.log(response.data);
+    console.log(response.data.totalHits);
     const dataArrs = response.data.hits;
     console.log(dataArrs);
-    console.log(page);
     return dataArrs;
 }
 function renderGallery(dataArrs) {
@@ -549,7 +549,7 @@ function renderGallery(dataArrs) {
         galleryRef.insertAdjacentHTML("beforeend", markupGallery);
     }
 }
-function renderGalleryItems({ webformatURL , largeImageURL , tags , likes , views , comments , downloads , page ,  }) {
+function renderGalleryItems({ webformatURL , largeImageURL , tags , likes , views , comments , downloads , totalHits ,  }) {
     return `
       <div class="photo-card">
             <img src="${webformatURL}" alt="${tags}" loading="lazy" width="150" height="100"/>
@@ -571,10 +571,13 @@ function renderGalleryItems({ webformatURL , largeImageURL , tags , likes , view
     `;
 }
 function onLoadMore() {
+    if (response.data.totalHits / 40 < 1) {
+        loadMoreRef.setAttribute("disabled", true);
+        return (0, _notiflixDefault.default).Notify.warning("We're sorry, but you've reached the end of search results.");
+    }
     page += 1;
-    console.log(page);
     const dataInput = inputRef.value;
-    console.log("dataInput ->", dataInput);
+    // console.log('dataInput ->', dataInput);
     fetchGallery(dataInput).then(renderGallery).catch((error)=>console.log("\u041E\u0448\u0438\u0431\u043E\u0447\u043A\u0430"));
 }
 function clearInput() {
@@ -584,30 +587,8 @@ function clearInput() {
 galleryRef.style.display = "flex";
 galleryRef.style.justifyContent = "center";
 galleryRef.style.flexWrap = "wrap";
-// galleryRef.style.gap = '30px';
 loadMoreRef.style.margin = "25px auto";
-loadMoreRef.style.display = "block"; // pfotoCardRef.style.width = '350px';
- // pfotoCardRef.style.height = '200px';
- // pfotoCardRef.style.outlineWidth = '5px dotted green';
- // pfotoCardRef.style.outlineColor = 'coral';
- // pfotoCardRef.style.outlineStyle = 'solid';
- // .thumb {
- //   height: 400px;
- //   width: 300px;
- // }
- // Второй - изображение необходимо «вместить» в контейнер, задав высоту и ширину 100%.
- // .thumb > img {
- //   display: block;
- //   height: 100%;
- //   width: 100%;
- // }
- // После этого к изображению можно применять свойство object-fit.
- // .thumb > img {
- //   display: block;
- //   height: 100%;
- //   width: 100%;
- //   object-fit: cover;
- // }
+loadMoreRef.style.display = "block";
 
 },{"axios":"jo6P5","notiflix":"5WWYd","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./css/styles.css":"1CY4s"}],"jo6P5":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");

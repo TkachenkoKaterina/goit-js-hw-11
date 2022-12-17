@@ -38,11 +38,11 @@ async function fetchGallery(dataInput) {
   );
   console.log(response);
   console.log(response.data);
+  console.log(response.data.totalHits);
 
   const dataArrs = response.data.hits;
   console.log(dataArrs);
 
-  console.log(page);
   return dataArrs;
 }
 
@@ -69,7 +69,7 @@ function renderGalleryItems({
   views,
   comments,
   downloads,
-  page,
+  totalHits,
 }) {
   return `
       <div class="photo-card">
@@ -93,10 +93,15 @@ function renderGalleryItems({
 }
 
 function onLoadMore() {
+  if (response.data.totalHits / 40 < 1) {
+    loadMoreRef.setAttribute('disabled', true);
+    return Notiflix.Notify.warning(
+      "We're sorry, but you've reached the end of search results."
+    );
+  }
   page += 1;
-  console.log(page);
   const dataInput = inputRef.value;
-  console.log('dataInput ->', dataInput);
+  // console.log('dataInput ->', dataInput);
   fetchGallery(dataInput)
     .then(renderGallery)
     .catch(error => console.log('Ошибочка'));
@@ -110,36 +115,6 @@ function clearInput() {
 galleryRef.style.display = 'flex';
 galleryRef.style.justifyContent = 'center';
 galleryRef.style.flexWrap = 'wrap';
-// galleryRef.style.gap = '30px';
 
 loadMoreRef.style.margin = '25px auto';
 loadMoreRef.style.display = 'block';
-
-// pfotoCardRef.style.width = '350px';
-// pfotoCardRef.style.height = '200px';
-// pfotoCardRef.style.outlineWidth = '5px dotted green';
-// pfotoCardRef.style.outlineColor = 'coral';
-// pfotoCardRef.style.outlineStyle = 'solid';
-
-// .thumb {
-//   height: 400px;
-//   width: 300px;
-// }
-
-// Второй - изображение необходимо «вместить» в контейнер, задав высоту и ширину 100%.
-
-// .thumb > img {
-//   display: block;
-//   height: 100%;
-//   width: 100%;
-// }
-
-// После этого к изображению можно применять свойство object-fit.
-
-// .thumb > img {
-//   display: block;
-//   height: 100%;
-//   width: 100%;
-
-//   object-fit: cover;
-// }
