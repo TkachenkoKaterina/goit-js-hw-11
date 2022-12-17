@@ -8,9 +8,10 @@ const loadMoreRef = document.querySelector('.load-more');
 loadMoreRef.setAttribute('disabled', true);
 
 const pfotoCardRef = document.querySelector('.photo-card');
-
 const onFormhRef = formRef.addEventListener('submit', onSubmit);
-const onLoadMoreRef = formRef.addEventListener('click', onLoadMore);
+const onLoadMoreRef = loadMoreRef.addEventListener('click', onLoadMore);
+
+let page = 1;
 
 function onSubmit(event) {
   event.preventDefault();
@@ -24,8 +25,7 @@ function onSubmit(event) {
 }
 
 async function fetchGallery(dataInput) {
-  let page = 1;
-  console.log(page);
+  page += 1;
   const response = await axios.get(
     `https://pixabay.com/api/?key=32131085-77c33ae4af62fbdfe36accafe&q=
         ${dataInput}
@@ -40,6 +40,8 @@ async function fetchGallery(dataInput) {
 
   const dataArrs = response.data.hits;
   console.log(dataArrs);
+
+  console.log(page);
   return dataArrs;
 }
 
@@ -93,11 +95,8 @@ function renderGalleryItems({
 }
 
 function onLoadMore() {
-  // loadMoreRef.style.visibility = 'hidden';
-  let page = 1;
-  fetchGallery();
-  page += 1;
   console.log(page);
+  fetchGallery();
 }
 
 function clearInput() {
@@ -108,6 +107,9 @@ galleryRef.style.display = 'flex';
 galleryRef.style.justifyContent = 'center';
 galleryRef.style.flexWrap = 'wrap';
 galleryRef.style.gap = '30px';
+
+loadMoreRef.style.margin = '25px auto';
+loadMoreRef.style.display = 'block';
 
 // pfotoCardRef.style.width = '350px';
 // pfotoCardRef.style.height = '200px';

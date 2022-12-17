@@ -514,7 +514,8 @@ const loadMoreRef = document.querySelector(".load-more");
 loadMoreRef.setAttribute("disabled", true);
 const pfotoCardRef = document.querySelector(".photo-card");
 const onFormhRef = formRef.addEventListener("submit", onSubmit);
-const onLoadMoreRef = formRef.addEventListener("click", onLoadMore);
+const onLoadMoreRef = loadMoreRef.addEventListener("click", onLoadMore);
+let page = 1;
 function onSubmit(event) {
     event.preventDefault();
     clearInput();
@@ -524,8 +525,7 @@ function onSubmit(event) {
     loadMoreRef.removeAttribute("disabled", false);
 }
 async function fetchGallery(dataInput) {
-    let page = 1;
-    console.log(page);
+    page += 1;
     const response = await axios.get(`https://pixabay.com/api/?key=32131085-77c33ae4af62fbdfe36accafe&q=
         ${dataInput}
         &image_type=photo
@@ -537,6 +537,7 @@ async function fetchGallery(dataInput) {
     console.log(response.data);
     const dataArrs = response.data.hits;
     console.log(dataArrs);
+    console.log(page);
     return dataArrs;
 }
 function renderGallery(dataArrs) {
@@ -547,7 +548,7 @@ function renderGallery(dataArrs) {
         galleryRef.insertAdjacentHTML("beforeend", markupGallery);
     }
 }
-function renderGalleryItems({ webformatURL , largeImageURL , tags , likes , views , comments , downloads , page ,  }) {
+function renderGalleryItems({ webformatURL , largeImageURL , tags , likes , views , comments , downloads , page: page1 ,  }) {
     return `
       <div class="photo-card">
             <img src="${webformatURL}" alt="${tags}" loading="lazy" width="150" height="100"/>
@@ -565,18 +566,15 @@ function renderGalleryItems({ webformatURL , largeImageURL , tags , likes , view
                     <b>Downloads ${downloads}</b>
                 </p>
                 <p class="info-item">
-                    <b>page ${page}</b>
+                    <b>page ${page1}</b>
                 </p>
             </div>
         </div>
     `;
 }
 function onLoadMore() {
-    // loadMoreRef.style.visibility = 'hidden';
-    let page = 1;
-    fetchGallery();
-    page += 1;
     console.log(page);
+    fetchGallery();
 }
 function clearInput() {
     galleryRef.innerHTML = "";
@@ -584,7 +582,9 @@ function clearInput() {
 galleryRef.style.display = "flex";
 galleryRef.style.justifyContent = "center";
 galleryRef.style.flexWrap = "wrap";
-galleryRef.style.gap = "30px"; // pfotoCardRef.style.width = '350px';
+galleryRef.style.gap = "30px";
+loadMoreRef.style.margin = "25px auto";
+loadMoreRef.style.display = "block"; // pfotoCardRef.style.width = '350px';
  // pfotoCardRef.style.height = '200px';
  // pfotoCardRef.style.outlineWidth = '5px dotted green';
  // pfotoCardRef.style.outlineColor = 'coral';
