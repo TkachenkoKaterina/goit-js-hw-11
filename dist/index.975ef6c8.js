@@ -526,7 +526,6 @@ function onSubmit(event) {
     loadMoreRef.removeAttribute("disabled", false);
 }
 async function fetchGallery(dataInput) {
-    page += 1;
     const response = await axios.get(`https://pixabay.com/api/?key=32131085-77c33ae4af62fbdfe36accafe&q=
         ${dataInput}
         &image_type=photo
@@ -534,15 +533,18 @@ async function fetchGallery(dataInput) {
         &safesearch=true
         &per_page=40
         &page=${page}`);
-    console.log(response);
-    console.log(response.data);
-    console.log(response.data.totalHits);
+    if (response.data.totalHits / 40 > 1) {
+        (0, _notiflixDefault.default).Notify.info(`Hooray! We found ${response.data.totalHits} images.`);
+        console.log(response.data.totalHits);
+    } else (0, _notiflixDefault.default).Notify.info("We're sorry, but you've reached the end of search results.");
     const dataArrs = response.data.hits;
     console.log(dataArrs);
+    response.data.totalHits -= 40;
+    console.log(response.data.totalHits);
+    page += 1;
     return dataArrs;
 }
 function renderGallery(dataArrs) {
-    //   console.log(dataArrs);
     if (dataArrs.length === 0) return (0, _notiflixDefault.default).Notify.warning("Sorry, there are no images matching your search query. Please try again.");
     else {
         const markupGallery = dataArrs.map((dataArr)=>renderGalleryItems(dataArr)).join("");
@@ -571,11 +573,6 @@ function renderGalleryItems({ webformatURL , largeImageURL , tags , likes , view
     `;
 }
 function onLoadMore() {
-    if (response.data.totalHits / 40 < 1) {
-        loadMoreRef.setAttribute("disabled", true);
-        return (0, _notiflixDefault.default).Notify.warning("We're sorry, but you've reached the end of search results.");
-    }
-    page += 1;
     const dataInput = inputRef.value;
     // console.log('dataInput ->', dataInput);
     fetchGallery(dataInput).then(renderGallery).catch((error)=>console.log("\u041E\u0448\u0438\u0431\u043E\u0447\u043A\u0430"));

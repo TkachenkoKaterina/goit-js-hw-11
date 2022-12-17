@@ -26,7 +26,6 @@ function onSubmit(event) {
 }
 
 async function fetchGallery(dataInput) {
-  page += 1;
   const response = await axios.get(
     `https://pixabay.com/api/?key=32131085-77c33ae4af62fbdfe36accafe&q=
         ${dataInput}
@@ -36,18 +35,27 @@ async function fetchGallery(dataInput) {
         &per_page=40
         &page=${page}`
   );
-  console.log(response);
-  console.log(response.data);
-  console.log(response.data.totalHits);
+
+  if (response.data.totalHits / 40 > 1) {
+    Notiflix.Notify.info(`Hooray! We found ${response.data.totalHits} images.`);
+
+    console.log(response.data.totalHits);
+  } else {
+    Notiflix.Notify.info(
+      "We're sorry, but you've reached the end of search results."
+    );
+  }
 
   const dataArrs = response.data.hits;
   console.log(dataArrs);
+  response.data.totalHits -= 40;
+  console.log(response.data.totalHits);
+  page += 1;
 
   return dataArrs;
 }
 
 function renderGallery(dataArrs) {
-  //   console.log(dataArrs);
   if (dataArrs.length === 0) {
     return Notiflix.Notify.warning(
       'Sorry, there are no images matching your search query. Please try again.'
@@ -93,13 +101,6 @@ function renderGalleryItems({
 }
 
 function onLoadMore() {
-  if (response.data.totalHits / 40 < 1) {
-    loadMoreRef.setAttribute('disabled', true);
-    return Notiflix.Notify.warning(
-      "We're sorry, but you've reached the end of search results."
-    );
-  }
-  page += 1;
   const dataInput = inputRef.value;
   // console.log('dataInput ->', dataInput);
   fetchGallery(dataInput)
