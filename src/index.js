@@ -1,3 +1,4 @@
+import './css/styles.css';
 const axios = require('axios').default;
 import Notiflix from 'notiflix';
 
@@ -86,27 +87,30 @@ function renderGalleryItems({
                 <p class="info-item">
                     <b>Downloads ${downloads}</b>
                 </p>
-                <p class="info-item">
-                    <b>page ${page}</b>
-                </p>
             </div>
         </div>
     `;
 }
 
 function onLoadMore() {
+  page += 1;
   console.log(page);
-  fetchGallery();
+  const dataInput = inputRef.value;
+  console.log('dataInput ->', dataInput);
+  fetchGallery(dataInput)
+    .then(renderGallery)
+    .catch(error => console.log('Ошибочка'));
 }
 
 function clearInput() {
+  page = 1;
   galleryRef.innerHTML = '';
 }
 
 galleryRef.style.display = 'flex';
 galleryRef.style.justifyContent = 'center';
 galleryRef.style.flexWrap = 'wrap';
-galleryRef.style.gap = '30px';
+// galleryRef.style.gap = '30px';
 
 loadMoreRef.style.margin = '25px auto';
 loadMoreRef.style.display = 'block';

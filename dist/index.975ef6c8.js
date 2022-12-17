@@ -504,6 +504,7 @@ function hmrAcceptRun(bundle, id) {
 
 },{}],"8lqZg":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+var _stylesCss = require("./css/styles.css");
 var _notiflix = require("notiflix");
 var _notiflixDefault = parcelHelpers.interopDefault(_notiflix);
 const axios = require("axios").default;
@@ -548,7 +549,7 @@ function renderGallery(dataArrs) {
         galleryRef.insertAdjacentHTML("beforeend", markupGallery);
     }
 }
-function renderGalleryItems({ webformatURL , largeImageURL , tags , likes , views , comments , downloads , page: page1 ,  }) {
+function renderGalleryItems({ webformatURL , largeImageURL , tags , likes , views , comments , downloads , page ,  }) {
     return `
       <div class="photo-card">
             <img src="${webformatURL}" alt="${tags}" loading="lazy" width="150" height="100"/>
@@ -565,24 +566,25 @@ function renderGalleryItems({ webformatURL , largeImageURL , tags , likes , view
                 <p class="info-item">
                     <b>Downloads ${downloads}</b>
                 </p>
-                <p class="info-item">
-                    <b>page ${page1}</b>
-                </p>
             </div>
         </div>
     `;
 }
 function onLoadMore() {
+    page += 1;
     console.log(page);
-    fetchGallery();
+    const dataInput = inputRef.value;
+    console.log("dataInput ->", dataInput);
+    fetchGallery(dataInput).then(renderGallery).catch((error)=>console.log("\u041E\u0448\u0438\u0431\u043E\u0447\u043A\u0430"));
 }
 function clearInput() {
+    page = 1;
     galleryRef.innerHTML = "";
 }
 galleryRef.style.display = "flex";
 galleryRef.style.justifyContent = "center";
 galleryRef.style.flexWrap = "wrap";
-galleryRef.style.gap = "30px";
+// galleryRef.style.gap = '30px';
 loadMoreRef.style.margin = "25px auto";
 loadMoreRef.style.display = "block"; // pfotoCardRef.style.width = '350px';
  // pfotoCardRef.style.height = '200px';
@@ -607,7 +609,7 @@ loadMoreRef.style.display = "block"; // pfotoCardRef.style.width = '350px';
  //   object-fit: cover;
  // }
 
-},{"axios":"jo6P5","notiflix":"5WWYd","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"jo6P5":[function(require,module,exports) {
+},{"axios":"jo6P5","notiflix":"5WWYd","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./css/styles.css":"1CY4s"}],"jo6P5":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>(0, _axiosJsDefault.default));
@@ -5601,6 +5603,6 @@ var global = arguments[3];
     };
 });
 
-},{}]},["1RB6v","8lqZg"], "8lqZg", "parcelRequire9909")
+},{}],"1CY4s":[function() {},{}]},["1RB6v","8lqZg"], "8lqZg", "parcelRequire9909")
 
 //# sourceMappingURL=index.975ef6c8.js.map
