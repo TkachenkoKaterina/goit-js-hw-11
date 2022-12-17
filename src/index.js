@@ -5,27 +5,26 @@ const inputRef = document.querySelector('input');
 const formRef = document.querySelector('#search-form');
 const galleryRef = document.querySelector('.gallery');
 const loadMoreRef = document.querySelector('.load-more');
+loadMoreRef.setAttribute('disabled', true);
+
 const pfotoCardRef = document.querySelector('.photo-card');
 
-const onInputRef = inputRef.addEventListener('input', onInput);
 const onFormhRef = formRef.addEventListener('submit', onSubmit);
 const onLoadMoreRef = formRef.addEventListener('click', onLoadMore);
-
-function onInput() {
-  //   console.log(inputRef.value);
-}
 
 function onSubmit(event) {
   event.preventDefault();
   clearInput();
   const dataInput = inputRef.value;
-  //   console.log('dataInput ->', dataInput);
+  console.log('dataInput ->', dataInput);
   fetchGallery(dataInput)
     .then(renderGallery)
     .catch(error => console.log('Ошибочка'));
+  loadMoreRef.removeAttribute('disabled', false);
 }
 
 async function fetchGallery(dataInput) {
+  let page = 1;
   console.log(page);
   const response = await axios.get(
     `https://pixabay.com/api/?key=32131085-77c33ae4af62fbdfe36accafe&q=
@@ -71,7 +70,7 @@ function renderGalleryItems({
 }) {
   return `
       <div class="photo-card">
-            <img src="${webformatURL}" alt="${tags}" loading="lazy" width="150" width="auto"/>
+            <img src="${webformatURL}" alt="${tags}" loading="lazy" width="150" height="100"/>
             <div class="info">
                 <p class="info-item">
                     <b>Likes ${likes}</b>
@@ -115,3 +114,26 @@ galleryRef.style.gap = '30px';
 // pfotoCardRef.style.outlineWidth = '5px dotted green';
 // pfotoCardRef.style.outlineColor = 'coral';
 // pfotoCardRef.style.outlineStyle = 'solid';
+
+// .thumb {
+//   height: 400px;
+//   width: 300px;
+// }
+
+// Второй - изображение необходимо «вместить» в контейнер, задав высоту и ширину 100%.
+
+// .thumb > img {
+//   display: block;
+//   height: 100%;
+//   width: 100%;
+// }
+
+// После этого к изображению можно применять свойство object-fit.
+
+// .thumb > img {
+//   display: block;
+//   height: 100%;
+//   width: 100%;
+
+//   object-fit: cover;
+// }
