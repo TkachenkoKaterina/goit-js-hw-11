@@ -1,8 +1,6 @@
 const axios = require('axios').default;
 import Notiflix from 'notiflix';
 
-let page = 1;
-
 const inputRef = document.querySelector('input');
 const formRef = document.querySelector('#search-form');
 const galleryRef = document.querySelector('.gallery');
@@ -28,7 +26,7 @@ function onSubmit(event) {
 }
 
 async function fetchGallery(dataInput) {
-  page += 1;
+  console.log(page);
   const response = await axios.get(
     `https://pixabay.com/api/?key=32131085-77c33ae4af62fbdfe36accafe&q=
         ${dataInput}
@@ -38,6 +36,8 @@ async function fetchGallery(dataInput) {
         &per_page=40
         &page=${page}`
   );
+  console.log(response);
+  console.log(response.data);
 
   const dataArrs = response.data.hits;
   console.log(dataArrs);
@@ -71,7 +71,7 @@ function renderGalleryItems({
 }) {
   return `
       <div class="photo-card">
-            <img src="${webformatURL}" alt="${tags}" loading="lazy" width="300" width="auto"/>
+            <img src="${webformatURL}" alt="${tags}" loading="lazy" width="150" width="auto"/>
             <div class="info">
                 <p class="info-item">
                     <b>Likes ${likes}</b>
@@ -94,12 +94,15 @@ function renderGalleryItems({
 }
 
 function onLoadMore() {
-  loadMoreRef.style.visibility = 'hidden';
+  // loadMoreRef.style.visibility = 'hidden';
+  let page = 1;
+  fetchGallery();
+  page += 1;
+  console.log(page);
 }
 
 function clearInput() {
   galleryRef.innerHTML = '';
-  page = 1;
 }
 
 galleryRef.style.display = 'flex';

@@ -507,7 +507,6 @@ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 var _notiflix = require("notiflix");
 var _notiflixDefault = parcelHelpers.interopDefault(_notiflix);
 const axios = require("axios").default;
-let page = 1;
 const inputRef = document.querySelector("input");
 const formRef = document.querySelector("#search-form");
 const galleryRef = document.querySelector(".gallery");
@@ -527,7 +526,7 @@ function onSubmit(event) {
     fetchGallery(dataInput).then(renderGallery).catch((error)=>console.log("\u041E\u0448\u0438\u0431\u043E\u0447\u043A\u0430"));
 }
 async function fetchGallery(dataInput) {
-    page += 1;
+    console.log(page);
     const response = await axios.get(`https://pixabay.com/api/?key=32131085-77c33ae4af62fbdfe36accafe&q=
         ${dataInput}
         &image_type=photo
@@ -535,6 +534,8 @@ async function fetchGallery(dataInput) {
         &safesearch=true
         &per_page=40
         &page=${page}`);
+    console.log(response);
+    console.log(response.data);
     const dataArrs = response.data.hits;
     console.log(dataArrs);
     return dataArrs;
@@ -547,10 +548,10 @@ function renderGallery(dataArrs) {
         galleryRef.insertAdjacentHTML("beforeend", markupGallery);
     }
 }
-function renderGalleryItems({ webformatURL , largeImageURL , tags , likes , views , comments , downloads , page: page1 ,  }) {
+function renderGalleryItems({ webformatURL , largeImageURL , tags , likes , views , comments , downloads , page ,  }) {
     return `
       <div class="photo-card">
-            <img src="${webformatURL}" alt="${tags}" loading="lazy" width="300" width="auto"/>
+            <img src="${webformatURL}" alt="${tags}" loading="lazy" width="150" width="auto"/>
             <div class="info">
                 <p class="info-item">
                     <b>Likes ${likes}</b>
@@ -565,18 +566,21 @@ function renderGalleryItems({ webformatURL , largeImageURL , tags , likes , view
                     <b>Downloads ${downloads}</b>
                 </p>
                 <p class="info-item">
-                    <b>page ${page1}</b>
+                    <b>page ${page}</b>
                 </p>
             </div>
         </div>
     `;
 }
 function onLoadMore() {
-    loadMoreRef.style.visibility = "hidden";
+    // loadMoreRef.style.visibility = 'hidden';
+    let page = 1;
+    fetchGallery();
+    page += 1;
+    console.log(page);
 }
 function clearInput() {
     galleryRef.innerHTML = "";
-    page = 1;
 }
 galleryRef.style.display = "flex";
 galleryRef.style.justifyContent = "center";
