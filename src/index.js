@@ -1,6 +1,8 @@
 import './css/styles.css';
 const axios = require('axios').default;
 import Notiflix from 'notiflix';
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
 
 const inputRef = document.querySelector('input');
 const formRef = document.querySelector('#search-form');
@@ -13,17 +15,43 @@ const onFormhRef = formRef.addEventListener('submit', onSubmit);
 const onLoadMoreRef = loadMoreRef.addEventListener('click', onLoadMore);
 
 let page = 1;
-let total = 0;
 
 function onSubmit(event) {
   event.preventDefault();
   clearInput();
-  loadMoreRef.style.visibility = 'hidden';
+
   const dataInput = inputRef.value;
-  console.log('dataInput ->', dataInput);
+
+  if (!dataInput) {
+    clearInput();
+    loadMoreRef.style.visibility = 'hidden';
+    return Notiflix.Notify.warning('Please enter a valid value');
+  }
+
   fetchGallery(dataInput)
-    .then(renderGallery)
+    .then(({ totalHits, hits }) => {
+      const totalPages = Math.ceil(totalHits / hits.length);
+      const currentPage = page - 1;
+
+      if (hits.length === 0) {
+        loadMoreRef.style.visibility = 'hidden';
+        Notiflix.Notify.failure(
+          'Sorry, there are no images matching your search query. Please try again.'
+        );
+      } else {
+        Notiflix.Notify.info(`Hooray! We found ${totalHits} images.`);
+
+        if (totalPages <= currentPage) {
+          Notiflix.Notify.info(
+            "We're sorry, but you've reached the end of search results."
+          );
+          loadMoreRef.style.visibility = 'hidden';
+        }
+      }
+      renderGallery(hits);
+    })
     .catch(error => console.log('Ошибочка'));
+  loadMoreRef.style.visibility = 'visible';
 }
 
 async function fetchGallery(dataInput) {
@@ -36,47 +64,22 @@ async function fetchGallery(dataInput) {
         &per_page=40
         &page=${page}`
   );
-  loadMoreRef.style.visibility = 'visible';
-  const dataArrs = response.data;
-  console.log(dataArrs);
-  console.log(dataArrs.hits);
-  console.log(dataArrs.totalHits);
 
+  const dataArrs = response.data;
   page += 1;
-  console.log(page);
   return dataArrs;
 }
 
-function onInfo(dataArrs) {
-  total = dataArrs.totalHits;
+function renderGallery(hits) {
+  const markupGallery = hits
+    .map(dataArr => renderGalleryItems(dataArr))
+    .join('');
 
-  console.log(total);
-  if (page === 1) {
-    console.log(total);
-    Notiflix.Notify.info(`Hooray! We found ${total} images.`);
-    total -= 40;
-    return total;
-  } else if (total / 40 < 1) {
-    loadMoreRef.style.visibility = 'hidden';
-    Notiflix.Notify.info(
-      "We're sorry, but you've reached the end of search results."
-    );
-    return [];
-  }
-}
-
-function renderGallery(dataArrs) {
-  if (dataArrs.length === 0) {
-    return Notiflix.Notify.warning(
-      'Sorry, there are no images matching your search query. Please try again.'
-    );
-  } else {
-    const markupGallery = dataArrs.hits
-      .map(dataArr => renderGalleryItems(dataArr))
-      .join('');
-
-    galleryRef.insertAdjacentHTML('beforeend', markupGallery);
-  }
+  galleryRef.insertAdjacentHTML('beforeend', markupGallery);
+  var lightbox = new SimpleLightbox('.gallery a', {
+    captionsData: 'alt',
+    captionDelay: 250,
+  });
 }
 
 function renderGalleryItems({
@@ -87,11 +90,14 @@ function renderGalleryItems({
   views,
   comments,
   downloads,
-  totalHits,
 }) {
   return `
       <div class="photo-card">
-            <img src="${webformatURL}" alt="${tags}" loading="lazy" width="150" height="100"/>
+          <div class="gallery">
+            <a href="${largeImageURL}">
+              <img src="${webformatURL}" alt="${tags}" loading="lazy" width="150" height="100"/>
+            </a>
+          </div>
             <div class="info">
                 <p class="info-item">
                     <b>Likes ${likes}</b>
@@ -112,10 +118,9 @@ function renderGalleryItems({
 
 function onLoadMore() {
   const dataInput = inputRef.value;
-  // console.log('dataInput ->', dataInput);
+
   fetchGallery(dataInput)
     .then(renderGallery)
-    .then(onInfo)
     .catch(error => console.log('Ошибочка'));
 }
 
@@ -130,11 +135,3 @@ galleryRef.style.flexWrap = 'wrap';
 
 loadMoreRef.style.margin = '25px auto';
 loadMoreRef.style.display = 'block';
-
-// .visible {
-//   visibility: visible;
-// }
-
-// .not-visible {
-//   visibility: hidden;
-// }
