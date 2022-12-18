@@ -517,6 +517,7 @@ const pfotoCardRef = document.querySelector(".photo-card");
 const onFormhRef = formRef.addEventListener("submit", onSubmit);
 const onLoadMoreRef = loadMoreRef.addEventListener("click", onLoadMore);
 let page = 1;
+let total = 0;
 function onSubmit(event) {
     event.preventDefault();
     clearInput();
@@ -533,21 +534,29 @@ async function fetchGallery(dataInput) {
         &safesearch=true
         &per_page=40
         &page=${page}`);
-    if (response.data.totalHits / 40 > 1) {
-        (0, _notiflixDefault.default).Notify.info(`Hooray! We found ${response.data.totalHits} images.`);
-        console.log(response.data.totalHits);
-    } else (0, _notiflixDefault.default).Notify.info("We're sorry, but you've reached the end of search results.");
-    const dataArrs = response.data.hits;
+    const dataArrs = response.data;
     console.log(dataArrs);
-    response.data.totalHits -= 40;
-    console.log(response.data.totalHits);
+    console.log(dataArrs.hits);
+    console.log(dataArrs.totalHits);
     page += 1;
+    console.log(page);
     return dataArrs;
+}
+function onInfo(dataArrs) {
+    total = dataArrs.totalHits;
+    console.log(total);
+    if (total / 40 > 1) {
+        console.log(total);
+        return (0, _notiflixDefault.default).Notify.info(`Hooray! We found ${total} images.`);
+    } else (0, _notiflixDefault.default).Notify.info("We're sorry, but you've reached the end of search results.");
+    total -= 40;
+    console.log(total);
+    return total;
 }
 function renderGallery(dataArrs) {
     if (dataArrs.length === 0) return (0, _notiflixDefault.default).Notify.warning("Sorry, there are no images matching your search query. Please try again.");
     else {
-        const markupGallery = dataArrs.map((dataArr)=>renderGalleryItems(dataArr)).join("");
+        const markupGallery = dataArrs.hits.map((dataArr)=>renderGalleryItems(dataArr)).join("");
         galleryRef.insertAdjacentHTML("beforeend", markupGallery);
     }
 }
@@ -575,7 +584,7 @@ function renderGalleryItems({ webformatURL , largeImageURL , tags , likes , view
 function onLoadMore() {
     const dataInput = inputRef.value;
     // console.log('dataInput ->', dataInput);
-    fetchGallery(dataInput).then(renderGallery).catch((error)=>console.log("\u041E\u0448\u0438\u0431\u043E\u0447\u043A\u0430"));
+    fetchGallery(dataInput).then(renderGallery).then(onInfo).catch((error)=>console.log("\u041E\u0448\u0438\u0431\u043E\u0447\u043A\u0430"));
 }
 function clearInput() {
     page = 1;

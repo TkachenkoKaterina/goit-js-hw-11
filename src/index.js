@@ -13,6 +13,7 @@ const onFormhRef = formRef.addEventListener('submit', onSubmit);
 const onLoadMoreRef = loadMoreRef.addEventListener('click', onLoadMore);
 
 let page = 1;
+let total = 0;
 
 function onSubmit(event) {
   event.preventDefault();
@@ -36,23 +37,31 @@ async function fetchGallery(dataInput) {
         &page=${page}`
   );
 
-  if (response.data.totalHits / 40 > 1) {
-    Notiflix.Notify.info(`Hooray! We found ${response.data.totalHits} images.`);
+  const dataArrs = response.data;
+  console.log(dataArrs);
+  console.log(dataArrs.hits);
+  console.log(dataArrs.totalHits);
 
-    console.log(response.data.totalHits);
+  page += 1;
+  console.log(page);
+  return dataArrs;
+}
+
+function onInfo(dataArrs) {
+  total = dataArrs.totalHits;
+  console.log(total);
+  if (total / 40 > 1) {
+    console.log(total);
+
+    return Notiflix.Notify.info(`Hooray! We found ${total} images.`);
   } else {
     Notiflix.Notify.info(
       "We're sorry, but you've reached the end of search results."
     );
   }
-
-  const dataArrs = response.data.hits;
-  console.log(dataArrs);
-  response.data.totalHits -= 40;
-  console.log(response.data.totalHits);
-  page += 1;
-
-  return dataArrs;
+  total -= 40;
+  console.log(total);
+  return total;
 }
 
 function renderGallery(dataArrs) {
@@ -61,7 +70,7 @@ function renderGallery(dataArrs) {
       'Sorry, there are no images matching your search query. Please try again.'
     );
   } else {
-    const markupGallery = dataArrs
+    const markupGallery = dataArrs.hits
       .map(dataArr => renderGalleryItems(dataArr))
       .join('');
 
@@ -105,6 +114,7 @@ function onLoadMore() {
   // console.log('dataInput ->', dataInput);
   fetchGallery(dataInput)
     .then(renderGallery)
+    .then(onInfo)
     .catch(error => console.log('Ошибочка'));
 }
 
