@@ -521,10 +521,10 @@ let total = 0;
 function onSubmit(event) {
     event.preventDefault();
     clearInput();
+    loadMoreRef.style.visibility = "hidden";
     const dataInput = inputRef.value;
     console.log("dataInput ->", dataInput);
     fetchGallery(dataInput).then(renderGallery).catch((error)=>console.log("\u041E\u0448\u0438\u0431\u043E\u0447\u043A\u0430"));
-    loadMoreRef.style.visibility = "visible";
 }
 async function fetchGallery(dataInput) {
     const response = await axios.get(`https://pixabay.com/api/?key=32131085-77c33ae4af62fbdfe36accafe&q=
@@ -534,6 +534,7 @@ async function fetchGallery(dataInput) {
         &safesearch=true
         &per_page=40
         &page=${page}`);
+    loadMoreRef.style.visibility = "visible";
     const dataArrs = response.data;
     console.log(dataArrs);
     console.log(dataArrs.hits);

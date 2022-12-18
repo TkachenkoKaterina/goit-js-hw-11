@@ -18,12 +18,12 @@ let total = 0;
 function onSubmit(event) {
   event.preventDefault();
   clearInput();
+  loadMoreRef.style.visibility = 'hidden';
   const dataInput = inputRef.value;
   console.log('dataInput ->', dataInput);
   fetchGallery(dataInput)
     .then(renderGallery)
     .catch(error => console.log('Ошибочка'));
-  loadMoreRef.style.visibility = 'visible';
 }
 
 async function fetchGallery(dataInput) {
@@ -36,7 +36,7 @@ async function fetchGallery(dataInput) {
         &per_page=40
         &page=${page}`
   );
-
+  loadMoreRef.style.visibility = 'visible';
   const dataArrs = response.data;
   console.log(dataArrs);
   console.log(dataArrs.hits);
