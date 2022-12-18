@@ -512,7 +512,7 @@ const inputRef = document.querySelector("input");
 const formRef = document.querySelector("#search-form");
 const galleryRef = document.querySelector(".gallery");
 const loadMoreRef = document.querySelector(".load-more");
-loadMoreRef.setAttribute("disabled", true);
+loadMoreRef.style.visibility = "hidden";
 const pfotoCardRef = document.querySelector(".photo-card");
 const onFormhRef = formRef.addEventListener("submit", onSubmit);
 const onLoadMoreRef = loadMoreRef.addEventListener("click", onLoadMore);
@@ -524,7 +524,7 @@ function onSubmit(event) {
     const dataInput = inputRef.value;
     console.log("dataInput ->", dataInput);
     fetchGallery(dataInput).then(renderGallery).catch((error)=>console.log("\u041E\u0448\u0438\u0431\u043E\u0447\u043A\u0430"));
-    loadMoreRef.removeAttribute("disabled", false);
+    loadMoreRef.style.visibility = "visible";
 }
 async function fetchGallery(dataInput) {
     const response = await axios.get(`https://pixabay.com/api/?key=32131085-77c33ae4af62fbdfe36accafe&q=
@@ -551,6 +551,7 @@ function onInfo(dataArrs) {
         total -= 40;
         return total;
     } else if (total / 40 < 1) {
+        loadMoreRef.style.visibility = "hidden";
         (0, _notiflixDefault.default).Notify.info("We're sorry, but you've reached the end of search results.");
         return [];
     }
@@ -596,7 +597,12 @@ galleryRef.style.display = "flex";
 galleryRef.style.justifyContent = "center";
 galleryRef.style.flexWrap = "wrap";
 loadMoreRef.style.margin = "25px auto";
-loadMoreRef.style.display = "block";
+loadMoreRef.style.display = "block"; // .visible {
+ //   visibility: visible;
+ // }
+ // .not-visible {
+ //   visibility: hidden;
+ // }
 
 },{"axios":"jo6P5","notiflix":"5WWYd","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./css/styles.css":"1CY4s"}],"jo6P5":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");

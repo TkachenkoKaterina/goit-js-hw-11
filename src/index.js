@@ -6,7 +6,7 @@ const inputRef = document.querySelector('input');
 const formRef = document.querySelector('#search-form');
 const galleryRef = document.querySelector('.gallery');
 const loadMoreRef = document.querySelector('.load-more');
-loadMoreRef.setAttribute('disabled', true);
+loadMoreRef.style.visibility = 'hidden';
 
 const pfotoCardRef = document.querySelector('.photo-card');
 const onFormhRef = formRef.addEventListener('submit', onSubmit);
@@ -23,7 +23,7 @@ function onSubmit(event) {
   fetchGallery(dataInput)
     .then(renderGallery)
     .catch(error => console.log('Ошибочка'));
-  loadMoreRef.removeAttribute('disabled', false);
+  loadMoreRef.style.visibility = 'visible';
 }
 
 async function fetchGallery(dataInput) {
@@ -57,6 +57,7 @@ function onInfo(dataArrs) {
     total -= 40;
     return total;
   } else if (total / 40 < 1) {
+    loadMoreRef.style.visibility = 'hidden';
     Notiflix.Notify.info(
       "We're sorry, but you've reached the end of search results."
     );
@@ -129,3 +130,11 @@ galleryRef.style.flexWrap = 'wrap';
 
 loadMoreRef.style.margin = '25px auto';
 loadMoreRef.style.display = 'block';
+
+// .visible {
+//   visibility: visible;
+// }
+
+// .not-visible {
+//   visibility: hidden;
+// }
