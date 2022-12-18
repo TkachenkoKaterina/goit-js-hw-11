@@ -593,7 +593,26 @@ function renderGalleryItems({ webformatURL , largeImageURL , tags , likes , view
 }
 function onLoadMore() {
     const dataInput = inputRef.value;
-    fetchGallery(dataInput).then(renderGallery).catch((error)=>console.log("\u041E\u0448\u0438\u0431\u043E\u0447\u043A\u0430"));
+    fetchGallery(dataInput).then(({ totalHits , hits  })=>{
+        const totalPages = Math.ceil(totalHits / hits.length);
+        const currentPage = page - 1;
+        // console.log(totalHits);
+        // console.log(hits.length);
+        // console.log(totalPages);
+        // console.log(currentPage);
+        if (totalPages <= currentPage) {
+            (0, _notiflixDefault.default).Notify.info("We're sorry, but you've reached the end of search results.");
+            loadMoreRef.style.visibility = "hidden";
+        }
+        renderGallery(hits);
+        // START smooth scroll
+        const { height: cardHeight  } = document.querySelector(".gallery").firstElementChild.getBoundingClientRect();
+        window.scrollBy({
+            top: cardHeight * 2,
+            behavior: "smooth"
+        });
+    // END smooth scroll
+    }).catch((error)=>console.log("\u041E\u0448\u0438\u0431\u043E\u0447\u043A\u0430"));
 }
 function clearInput() {
     page = 1;
