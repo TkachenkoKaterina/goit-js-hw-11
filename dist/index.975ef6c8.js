@@ -596,10 +596,6 @@ function onLoadMore() {
     fetchGallery(dataInput).then(({ totalHits , hits  })=>{
         const totalPages = Math.ceil(totalHits / hits.length);
         const currentPage = page - 1;
-        // console.log(totalHits);
-        // console.log(hits.length);
-        // console.log(totalPages);
-        // console.log(currentPage);
         if (totalPages <= currentPage) {
             (0, _notiflixDefault.default).Notify.info("We're sorry, but you've reached the end of search results.");
             loadMoreRef.style.visibility = "hidden";

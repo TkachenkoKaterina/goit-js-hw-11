@@ -124,10 +124,6 @@ function onLoadMore() {
     .then(({ totalHits, hits }) => {
       const totalPages = Math.ceil(totalHits / hits.length);
       const currentPage = page - 1;
-      // console.log(totalHits);
-      // console.log(hits.length);
-      // console.log(totalPages);
-      // console.log(currentPage);
 
       if (totalPages <= currentPage) {
         Notiflix.Notify.info(
