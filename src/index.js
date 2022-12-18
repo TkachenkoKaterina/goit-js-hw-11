@@ -49,19 +49,19 @@ async function fetchGallery(dataInput) {
 
 function onInfo(dataArrs) {
   total = dataArrs.totalHits;
-  console.log(total);
-  if (total / 40 > 1) {
-    console.log(total);
 
-    return Notiflix.Notify.info(`Hooray! We found ${total} images.`);
-  } else {
+  console.log(total);
+  if (page === 1) {
+    console.log(total);
+    Notiflix.Notify.info(`Hooray! We found ${total} images.`);
+    total -= 40;
+    return total;
+  } else if (total / 40 < 1) {
     Notiflix.Notify.info(
       "We're sorry, but you've reached the end of search results."
     );
+    return [];
   }
-  total -= 40;
-  console.log(total);
-  return total;
 }
 
 function renderGallery(dataArrs) {

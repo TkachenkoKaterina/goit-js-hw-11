@@ -545,13 +545,15 @@ async function fetchGallery(dataInput) {
 function onInfo(dataArrs) {
     total = dataArrs.totalHits;
     console.log(total);
-    if (total / 40 > 1) {
+    if (page === 1) {
         console.log(total);
-        return (0, _notiflixDefault.default).Notify.info(`Hooray! We found ${total} images.`);
-    } else (0, _notiflixDefault.default).Notify.info("We're sorry, but you've reached the end of search results.");
-    total -= 40;
-    console.log(total);
-    return total;
+        (0, _notiflixDefault.default).Notify.info(`Hooray! We found ${total} images.`);
+        total -= 40;
+        return total;
+    } else if (total / 40 < 1) {
+        (0, _notiflixDefault.default).Notify.info("We're sorry, but you've reached the end of search results.");
+        return [];
+    }
 }
 function renderGallery(dataArrs) {
     if (dataArrs.length === 0) return (0, _notiflixDefault.default).Notify.warning("Sorry, there are no images matching your search query. Please try again.");
