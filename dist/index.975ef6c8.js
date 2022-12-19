@@ -522,6 +522,7 @@ const onLoadMoreRef = loadMoreRef.addEventListener("click", onLoadMore);
 let page = 1;
 function onSubmit(event) {
     event.preventDefault();
+    loadMoreRef.style.visibility = "hidden";
     clearInput();
     const dataInput = inputRef.value;
     if (!dataInput) {
@@ -537,6 +538,7 @@ function onSubmit(event) {
             (0, _notiflixDefault.default).Notify.failure("Sorry, there are no images matching your search query. Please try again.");
         } else {
             (0, _notiflixDefault.default).Notify.info(`Hooray! We found ${totalHits} images.`);
+            loadMoreRef.style.visibility = "visible";
             if (totalPages <= currentPage) {
                 (0, _notiflixDefault.default).Notify.info("We're sorry, but you've reached the end of search results.");
                 loadMoreRef.style.visibility = "hidden";
@@ -544,9 +546,9 @@ function onSubmit(event) {
         }
         renderGallery(hits);
     }).catch((error)=>console.log("\u041E\u0448\u0438\u0431\u043E\u0447\u043A\u0430"));
-    loadMoreRef.style.visibility = "visible";
 }
 async function fetchGallery(dataInput) {
+    loadMoreRef.style.visibility = "hidden";
     const response = await axios.get(`https://pixabay.com/api/?key=32131085-77c33ae4af62fbdfe36accafe&q=
         ${dataInput}
         &image_type=photo
@@ -599,7 +601,7 @@ function onLoadMore() {
         if (totalPages <= currentPage) {
             (0, _notiflixDefault.default).Notify.info("We're sorry, but you've reached the end of search results.");
             loadMoreRef.style.visibility = "hidden";
-        }
+        } else loadMoreRef.style.visibility = "visible";
         renderGallery(hits);
         // START smooth scroll
         const { height: cardHeight  } = document.querySelector(".gallery").firstElementChild.getBoundingClientRect();

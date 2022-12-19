@@ -18,6 +18,7 @@ let page = 1;
 
 function onSubmit(event) {
   event.preventDefault();
+  loadMoreRef.style.visibility = 'hidden';
   clearInput();
 
   const dataInput = inputRef.value;
@@ -40,6 +41,7 @@ function onSubmit(event) {
         );
       } else {
         Notiflix.Notify.info(`Hooray! We found ${totalHits} images.`);
+        loadMoreRef.style.visibility = 'visible';
 
         if (totalPages <= currentPage) {
           Notiflix.Notify.info(
@@ -51,10 +53,10 @@ function onSubmit(event) {
       renderGallery(hits);
     })
     .catch(error => console.log('Ошибочка'));
-  loadMoreRef.style.visibility = 'visible';
 }
 
 async function fetchGallery(dataInput) {
+  loadMoreRef.style.visibility = 'hidden';
   const response = await axios.get(
     `https://pixabay.com/api/?key=32131085-77c33ae4af62fbdfe36accafe&q=
         ${dataInput}
@@ -130,6 +132,8 @@ function onLoadMore() {
           "We're sorry, but you've reached the end of search results."
         );
         loadMoreRef.style.visibility = 'hidden';
+      } else {
+        loadMoreRef.style.visibility = 'visible';
       }
 
       renderGallery(hits);
