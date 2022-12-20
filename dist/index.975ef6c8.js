@@ -599,7 +599,7 @@ function onLoadMore() {
     fetchGallery(dataInput).then(({ hits  })=>{
         console.log(hits);
         if (hits.length === 40 && totalLength <= 500) {
-            console.log(totalLength);
+            // console.log(totalLength);
             totalLength += 40;
             loadMoreRef.style.visibility = "visible";
         } else {
