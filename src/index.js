@@ -15,6 +15,7 @@ const onFormhRef = formRef.addEventListener('submit', onSubmit);
 const onLoadMoreRef = loadMoreRef.addEventListener('click', onLoadMore);
 
 let page = 1;
+let totalLength = 80;
 
 function onSubmit(event) {
   event.preventDefault();
@@ -123,31 +124,32 @@ function onLoadMore() {
   const dataInput = inputRef.value;
 
   fetchGallery(dataInput)
-    .then(({ totalHits, hits }) => {
-      const totalPages = Math.ceil(totalHits / hits.length);
-      const currentPage = page - 1;
+    .then(({ hits }) => {
+      console.log(hits);
 
-      if (totalPages <= currentPage) {
+      if (hits.length === 40 && totalLength <= 500) {
+        console.log(totalLength);
+        totalLength += 40;
+        loadMoreRef.style.visibility = 'visible';
+      } else {
         Notiflix.Notify.info(
           "We're sorry, but you've reached the end of search results."
         );
         loadMoreRef.style.visibility = 'hidden';
-      } else {
-        loadMoreRef.style.visibility = 'visible';
       }
 
       renderGallery(hits);
 
       // START smooth scroll
 
-      const { height: cardHeight } = document
-        .querySelector('.gallery')
-        .firstElementChild.getBoundingClientRect();
+      // const { height: cardHeight } = document
+      //   .querySelector('.gallery')
+      //   .firstElementChild.getBoundingClientRect();
 
-      window.scrollBy({
-        top: cardHeight * 2,
-        behavior: 'smooth',
-      });
+      // window.scrollBy({
+      //   top: cardHeight * 2,
+      //   behavior: 'smooth',
+      // });
 
       // END smooth scroll
     })
