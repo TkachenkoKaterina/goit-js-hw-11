@@ -89,7 +89,7 @@
 63C:\Users\User\Documents\GitHub\goit-js-hw-11\node_modules\acorn133156914985456748 1
 90C:\Users\User\Documents\GitHub\goit-js-hw-11\node_modules\yaml\dist\PlainValue-ec8e588e.js133156914994752147 0
 86C:\Users\User\Documents\GitHub\goit-js-hw-11\node_modules\color-convert\conversions.js133156914976525039 0
-57C:\Users\User\Documents\GitHub\goit-js-hw-11\src\index.js133160473220224876 0
+57C:\Users\User\Documents\GitHub\goit-js-hw-11\src\index.js133160477807965918 0
 76C:\Users\User\Documents\GitHub\goit-js-hw-11\node_modules\lodash\isObject.js133156915020495090 0
 75C:\Users\User\Documents\GitHub\goit-js-hw-11\node_modules\lodash\fp\path.js133156915023394046 0
 89C:\Users\User\Documents\GitHub\goit-js-hw-11\node_modules\caniuse-lite\data\regions\MK.js133156927124415094 0
@@ -135,7 +135,7 @@
 97C:\Users\User\Documents\GitHub\goit-js-hw-11\node_modules\caniuse-lite\data\features\gyroscope.js133156927121558263 0
 102C:\Users\User\Documents\GitHub\goit-js-hw-11\node_modules\node-gyp-build-optional-packages\optional.js133156914979293238 0
 91C:\Users\User\Documents\GitHub\goit-js-hw-11\node_modules\simplelightbox\demo\img\mouse.svg133158413926362501 0
-49C:\Users\User\Documents\GitHub\goit-js-hw-11\dist133160473221676352 1
+49C:\Users\User\Documents\GitHub\goit-js-hw-11\dist133160477769026111 1
 84C:\Users\User\Documents\GitHub\goit-js-hw-11\node_modules\simplelightbox\gulpfile.js133158413923842593 0
 78C:\Users\User\Documents\GitHub\goit-js-hw-11\node_modules\cli\examples\sort.js133156914986424160 0
 72C:\Users\User\Documents\GitHub\goit-js-hw-11\node_modules\lodash\noop.js133156915022596890 0
@@ -975,7 +975,7 @@
 81C:\Users\User\Documents\GitHub\goit-js-hw-11\node_modules\yaml\types\timestamp.js133156914998758696 0
 80C:\Users\User\Documents\GitHub\goit-js-hw-11\node_modules\lodash\fp\defaultTo.js133156915014154621 0
 88C:\Users\User\Documents\GitHub\goit-js-hw-11\node_modules\yaml\dist\Document-9b4560a1.js133156914979732058 0
-67C:\Users\User\Documents\GitHub\goit-js-hw-11\dist\index.975ef6c8.js133160473221606524 0
+67C:\Users\User\Documents\GitHub\goit-js-hw-11\dist\index.975ef6c8.js133160477768916403 0
 83C:\Users\User\Documents\GitHub\goit-js-hw-11\node_modules\type-fest\ts41\index.d.ts133156914990473585 0
 76C:\Users\User\Documents\GitHub\goit-js-hw-11\node_modules\yaml\dist\index.js133156914984638932 0
 77C:\Users\User\Documents\GitHub\goit-js-hw-11\node_modules\lodash\_baseSome.js133156915005662233 0
@@ -6396,7 +6396,7 @@
 109C:\Users\User\Documents\GitHub\goit-js-hw-11\node_modules\@babel\highlight\node_modules\color-name\.npmignore133156914974474375 0
 106C:\Users\User\Documents\GitHub\goit-js-hw-11\node_modules\@babel\highlight\node_modules\color-name\LICENSE133156914978046084 0
 111C:\Users\User\Documents\GitHub\goit-js-hw-11\node_modules\@babel\highlight\node_modules\color-name\package.json133156914972471910 0
-71C:\Users\User\Documents\GitHub\goit-js-hw-11\dist\index.975ef6c8.js.map133160473221656383 0
+71C:\Users\User\Documents\GitHub\goit-js-hw-11\dist\index.975ef6c8.js.map133160477768946314 0
 108C:\Users\User\Documents\GitHub\goit-js-hw-11\node_modules\@babel\highlight\node_modules\color-name\README.md133156914976265725 0
 111C:\Users\User\Documents\GitHub\goit-js-hw-11\node_modules\@babel\highlight\node_modules\color-convert\README.md133156914981297878 0
 107C:\Users\User\Documents\GitHub\goit-js-hw-11\node_modules\@babel\highlight\node_modules\chalk\index.js.flow133156914976285677 0
