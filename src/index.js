@@ -18,7 +18,7 @@ const onLoadMoreRef = loadMoreRef.addEventListener('click', onLoadMore);
 let page = 1;
 let totalLength = 80;
 
-function onSubmit(event) {
+async function onSubmit(event) {
   event.preventDefault();
   loadMoreRef.style.visibility = 'hidden';
   clearInput();
@@ -31,30 +31,31 @@ function onSubmit(event) {
     return Notiflix.Notify.warning('Please enter a valid value');
   }
 
-  fetchGallery(dataInput)
-    .then(({ totalHits, hits }) => {
-      const totalPages = Math.ceil(totalHits / hits.length);
-      const currentPage = page - 1;
+  try {
+    const { totalHits, hits } = await fetchGallery(dataInput);
+    const totalPages = Math.ceil(totalHits / hits.length);
+    const currentPage = page - 1;
 
-      if (hits.length === 0) {
-        loadMoreRef.style.visibility = 'hidden';
-        Notiflix.Notify.failure(
-          'Sorry, there are no images matching your search query. Please try again.'
+    if (hits.length === 0) {
+      loadMoreRef.style.visibility = 'hidden';
+      Notiflix.Notify.failure(
+        'Sorry, there are no images matching your search query. Please try again.'
+      );
+    } else {
+      Notiflix.Notify.info(`Hooray! We found ${totalHits} images.`);
+      loadMoreRef.style.visibility = 'visible';
+
+      if (totalPages <= currentPage) {
+        Notiflix.Notify.info(
+          "We're sorry, but you've reached the end of search results."
         );
-      } else {
-        Notiflix.Notify.info(`Hooray! We found ${totalHits} images.`);
-        loadMoreRef.style.visibility = 'visible';
-
-        if (totalPages <= currentPage) {
-          Notiflix.Notify.info(
-            "We're sorry, but you've reached the end of search results."
-          );
-          loadMoreRef.style.visibility = 'hidden';
-        }
+        loadMoreRef.style.visibility = 'hidden';
       }
-      renderGallery(hits);
-    })
-    .catch(error => console.log('Ошибочка'));
+    }
+    renderGallery(hits);
+  } catch (error) {
+    console.log('Ошибочка');
+  }
 }
 
 async function fetchGallery(dataInput) {
@@ -111,40 +112,38 @@ function renderGalleryItems({
     `;
 }
 
-function onLoadMore() {
+async function onLoadMore() {
   const dataInput = inputRef.value;
 
-  fetchGallery(dataInput)
-    .then(({ hits }) => {
-      console.log(hits);
+  try {
+    const { hits } = await fetchGallery(dataInput);
+    if (hits.length === 40 && totalLength <= 500) {
+      // console.log(totalLength);
+      totalLength += 40;
+      loadMoreRef.style.visibility = 'visible';
+    } else {
+      Notiflix.Notify.info(
+        "We're sorry, but you've reached the end of search results."
+      );
+      loadMoreRef.style.visibility = 'hidden';
+    }
+    renderGallery(hits);
+  } catch (error) {
+    console.log('Ошибочка');
+  }
 
-      if (hits.length === 40 && totalLength <= 500) {
-        // console.log(totalLength);
-        totalLength += 40;
-        loadMoreRef.style.visibility = 'visible';
-      } else {
-        Notiflix.Notify.info(
-          "We're sorry, but you've reached the end of search results."
-        );
-        loadMoreRef.style.visibility = 'hidden';
-      }
+  // START smooth scroll
 
-      renderGallery(hits);
+  // const { height: cardHeight } = document
+  //   .querySelector('.gallery')
+  //   .firstElementChild.getBoundingClientRect();
 
-      // START smooth scroll
+  // window.scrollBy({
+  //   top: cardHeight * 2,
+  //   behavior: 'smooth',
+  // });
 
-      // const { height: cardHeight } = document
-      //   .querySelector('.gallery')
-      //   .firstElementChild.getBoundingClientRect();
-
-      // window.scrollBy({
-      //   top: cardHeight * 2,
-      //   behavior: 'smooth',
-      // });
-
-      // END smooth scroll
-    })
-    .catch(error => console.log('Ошибочка'));
+  // END smooth scroll
 }
 
 function clearInput() {

@@ -522,7 +522,7 @@ const onFormhRef = formRef.addEventListener("submit", onSubmit);
 const onLoadMoreRef = loadMoreRef.addEventListener("click", onLoadMore);
 let page = 1;
 let totalLength = 80;
-function onSubmit(event) {
+async function onSubmit(event) {
     event.preventDefault();
     loadMoreRef.style.visibility = "hidden";
     clearInput();
@@ -532,7 +532,8 @@ function onSubmit(event) {
         loadMoreRef.style.visibility = "hidden";
         return (0, _notiflixDefault.default).Notify.warning("Please enter a valid value");
     }
-    fetchGallery(dataInput).then(({ totalHits , hits  })=>{
+    try {
+        const { totalHits , hits  } = await fetchGallery(dataInput);
         const totalPages = Math.ceil(totalHits / hits.length);
         const currentPage = page - 1;
         if (hits.length === 0) {
@@ -547,7 +548,9 @@ function onSubmit(event) {
             }
         }
         renderGallery(hits);
-    }).catch((error)=>console.log("\u041E\u0448\u0438\u0431\u043E\u0447\u043A\u0430"));
+    } catch (error) {
+        console.log("\u041E\u0448\u0438\u0431\u043E\u0447\u043A\u0430");
+    }
 }
 async function fetchGallery(dataInput) {
     loadMoreRef.style.visibility = "hidden";
@@ -588,10 +591,10 @@ function renderGalleryItems({ webformatURL , largeImageURL , tags , likes , view
         </div>
     `;
 }
-function onLoadMore() {
+async function onLoadMore() {
     const dataInput = inputRef.value;
-    fetchGallery(dataInput).then(({ hits  })=>{
-        console.log(hits);
+    try {
+        const { hits  } = await fetchGallery(dataInput);
         if (hits.length === 40 && totalLength <= 500) {
             // console.log(totalLength);
             totalLength += 40;
@@ -601,16 +604,18 @@ function onLoadMore() {
             loadMoreRef.style.visibility = "hidden";
         }
         renderGallery(hits);
-    // START smooth scroll
-    // const { height: cardHeight } = document
-    //   .querySelector('.gallery')
-    //   .firstElementChild.getBoundingClientRect();
-    // window.scrollBy({
-    //   top: cardHeight * 2,
-    //   behavior: 'smooth',
-    // });
-    // END smooth scroll
-    }).catch((error)=>console.log("\u041E\u0448\u0438\u0431\u043E\u0447\u043A\u0430"));
+    } catch (error) {
+        console.log("\u041E\u0448\u0438\u0431\u043E\u0447\u043A\u0430");
+    }
+// START smooth scroll
+// const { height: cardHeight } = document
+//   .querySelector('.gallery')
+//   .firstElementChild.getBoundingClientRect();
+// window.scrollBy({
+//   top: cardHeight * 2,
+//   behavior: 'smooth',
+// });
+// END smooth scroll
 }
 function clearInput() {
     page = 1;
