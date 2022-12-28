@@ -511,6 +511,7 @@ var _simplelightbox = require("simplelightbox");
 var _simplelightboxDefault = parcelHelpers.interopDefault(_simplelightbox);
 var _simpleLightboxMinCss = require("simplelightbox/dist/simple-lightbox.min.css");
 const axios = require("axios").default;
+const API_KEY = "32131085-77c33ae4af62fbdfe36accafe";
 const inputRef = document.querySelector("input");
 const formRef = document.querySelector("#search-form");
 const galleryRef = document.querySelector(".gallery");
@@ -525,7 +526,7 @@ function onSubmit(event) {
     event.preventDefault();
     loadMoreRef.style.visibility = "hidden";
     clearInput();
-    const dataInput = inputRef.value;
+    const dataInput = inputRef.value.trim();
     if (!dataInput) {
         clearInput();
         loadMoreRef.style.visibility = "hidden";
@@ -550,19 +551,12 @@ function onSubmit(event) {
 }
 async function fetchGallery(dataInput) {
     loadMoreRef.style.visibility = "hidden";
-    const response = await axios.get(`https://pixabay.com/api/?key=32131085-77c33ae4af62fbdfe36accafe&q=
-        ${dataInput}
-        &image_type=photo
-        &iorientation=horizontal
-        &safesearch=true
-        &per_page=40
-        &page=${page}`);
-    const dataArrs = response.data;
+    const { data  } = await axios.get(`https://pixabay.com/api/?key=${API_KEY}&q=${dataInput}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=${page}`);
     page += 1;
-    return dataArrs;
+    return data;
 }
 function renderGallery(hits) {
-    const markupGallery = hits.map((dataArr)=>renderGalleryItems(dataArr)).join("");
+    const markupGallery = hits.map((data)=>renderGalleryItems(data)).join("");
     galleryRef.insertAdjacentHTML("beforeend", markupGallery);
     var lightbox = new (0, _simplelightboxDefault.default)(".gallery a", {
         captionsData: "alt",
@@ -599,7 +593,7 @@ function onLoadMore() {
     fetchGallery(dataInput).then(({ hits  })=>{
         console.log(hits);
         if (hits.length === 40 && totalLength <= 500) {
-            console.log(totalLength);
+            // console.log(totalLength);
             totalLength += 40;
             loadMoreRef.style.visibility = "visible";
         } else {

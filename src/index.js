@@ -4,6 +4,7 @@ import Notiflix from 'notiflix';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 
+const API_KEY = '32131085-77c33ae4af62fbdfe36accafe';
 const inputRef = document.querySelector('input');
 const formRef = document.querySelector('#search-form');
 const galleryRef = document.querySelector('.gallery');
@@ -22,7 +23,7 @@ function onSubmit(event) {
   loadMoreRef.style.visibility = 'hidden';
   clearInput();
 
-  const dataInput = inputRef.value;
+  const dataInput = inputRef.value.trim();
 
   if (!dataInput) {
     clearInput();
@@ -58,25 +59,15 @@ function onSubmit(event) {
 
 async function fetchGallery(dataInput) {
   loadMoreRef.style.visibility = 'hidden';
-  const response = await axios.get(
-    `https://pixabay.com/api/?key=32131085-77c33ae4af62fbdfe36accafe&q=
-        ${dataInput}
-        &image_type=photo
-        &iorientation=horizontal
-        &safesearch=true
-        &per_page=40
-        &page=${page}`
+  const { data } = await axios.get(
+    `https://pixabay.com/api/?key=${API_KEY}&q=${dataInput}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=${page}`
   );
-
-  const dataArrs = response.data;
   page += 1;
-  return dataArrs;
+  return data;
 }
 
 function renderGallery(hits) {
-  const markupGallery = hits
-    .map(dataArr => renderGalleryItems(dataArr))
-    .join('');
+  const markupGallery = hits.map(data => renderGalleryItems(data)).join('');
 
   galleryRef.insertAdjacentHTML('beforeend', markupGallery);
 
